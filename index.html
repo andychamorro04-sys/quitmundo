@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cooperativa de Ahorro y Crédito Quitmundo LTDA.</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eefdf4',
+                            100: '#dcfce7',
+                            500: '#10b981', /* Verde Esmeralda Claro */
+                            600: '#059669',
+                            700: '#047857',
+                            900: '#064e3b',
+                            navy: '#0f172a', /* Azul Institucional Oscuro */
+                            navyLight: '#1e293b',
+                            gold: '#d97706', /* Detalle elegante en Oro */
+                            goldLight: '#fef3c7'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            background: #10b981;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
+            transition: transform 0.1s ease;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.25);
+        }
+        /* Transición suave para acordeones */
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+        }
+        .faq-active .faq-content {
+            max-height: 1000px;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .faq-active .faq-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans antialiased">
+
+    <div class="bg-brand-navy text-slate-300 text-xs py-2.5 px-4 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div class="flex items-center gap-4">
+                <span><i class="fa-solid fa-clock text-brand-500 mr-1.5"></i> Lun - Vie: 09:00 AM - 05:00 PM</span>
+                <span><i class="fa-solid fa-building text-brand-500 mr-1.5"></i> Regulados por la SEPS</span>
+            </div>
+            <div class="flex items-center gap-2 font-semibold">
+                <span class="w-2.5 h-2.5 bg-brand-500 rounded-full animate-pulse"></span>
+                <span class="text-white">Aprobación Inmediata</span> al entregar requisitos
+            </div>
+        </div>
+    </div>
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            
+            <!-- LOGOTIPO VECTORIAL PREMIUM -->
+            <div class="flex items-center gap-3">
+                <div class="relative bg-gradient-to-tr from-brand-700 to-brand-500 p-2.5 rounded-2xl shadow-lg shadow-brand-500/20">
+                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                    <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-brand-gold rounded-full border-2 border-white flex items-center justify-center text-[8px] text-white">★</div>
+                </div>
+                <div>
+                    <span class="block text-brand-navy font-extrabold text-2xl tracking-tight leading-none">QUITMUNDO</span>
+                    <span class="block text-brand-gold text-[10px] font-bold uppercase tracking-widest mt-1">COOPERATIVA DE AHORRO Y CRÉDITO</span>
+                </div>
+            </div>
+            
+            <!-- ENLACES & ACCIÓN DE CABECERA -->
+            <div class="flex items-center gap-4 w-full sm:w-auto justify-end">
+                <a href="#requisitos" class="hidden md:inline-block text-sm font-semibold text-slate-600 hover:text-brand-500 transition">Requisitos</a>
+                <a href="#productos" class="hidden md:inline-block text-sm font-semibold text-slate-600 hover:text-brand-500 transition">Créditos</a>
+                <a href="#oficinas" class="hidden md:inline-block text-sm font-semibold text-slate-600 hover:text-brand-500 transition">Oficinas</a>
+                <!-- BOTÓN PRINCIPAL: ABRIR CUENTA ONLINE -->
+                <button onclick="abrirModalCuenta()" class="bg-gradient-to-r from-brand-gold to-amber-600 hover:from-amber-600 hover:to-brand-gold text-white font-extrabold text-sm px-5 py-3 rounded-xl transition-all duration-300 shadow-md shadow-brand-gold/20 flex items-center gap-2 cursor-pointer w-full sm:w-auto justify-center">
+                    <i class="fa-solid fa-user-plus"></i> Abrir Mi Cuenta
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="relative bg-gradient-to-b from-brand-navy to-brand-navyLight text-white py-16 sm:py-20 px-4 overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="relative max-w-5xl mx-auto text-center space-y-6">
+            <span class="inline-flex items-center gap-1.5 bg-brand-700/30 border border-brand-500/40 px-4 py-1.5 rounded-full text-brand-100 text-xs sm:text-sm font-bold">
+                🔒 Cooperativa Segura y Solvente
+            </span>
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-none">
+                La forma más rápida de crecer,<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-100 via-brand-500 to-brand-100">sin trabas ni buró de crédito.</span>
+            </h1>
+            <p class="text-slate-300 text-base sm:text-xl max-w-3xl mx-auto font-light leading-relaxed">
+                Obtén financiamiento directo entregando tus requisitos básicos o abre tu cuenta de ahorros en línea en solo 3 minutos. Tu bienestar financiero empieza hoy.
+            </p>
+            <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#simulador" class="w-full sm:w-auto bg-brand-500 hover:bg-brand-600 text-white font-extrabold px-8 py-4 rounded-xl transition shadow-lg shadow-brand-500/30 text-center">
+                    <i class="fa-solid fa-calculator mr-2"></i> Simular Mi Crédito
+                </a>
+                <button onclick="abrirModalCuenta()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 font-extrabold px-8 py-4 rounded-xl transition text-center">
+                    Apertura de Cuenta Online ($50)
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="productos" class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <h2 class="text-3xl font-black text-brand-navy">Nuestras Soluciones de Crédito</h2>
+            <p class="text-slate-500 text-sm sm:text-base mt-2">Productos financieros ágiles y diseñados a la medida de tus necesidades.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            
+            <!-- PRODUCTO 1: CRÉDITO DE CONSUMO (ONLINE) -->
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden flex flex-col justify-between p-6 sm:p-8 hover:border-brand-500 transition-all duration-300 group">
+                <div class="space-y-4">
+                    <div class="w-14 h-14 bg-brand-50 rounded-2xl flex items-center justify-center text-brand-500 text-2xl group-hover:scale-110 transition-transform duration-200">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-navy">Crédito de Consumo Online</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        Destinado para tus compras de tecnología, viajes, salud, estudios o consolidar deudas urgentes. Con desembolso el mismo día.
+                    </p>
+                    <ul class="text-xs text-slate-600 space-y-2 font-medium">
+                        <li><i class="fa-solid fa-check text-brand-500 mr-2"></i> Desde $100 hasta $10,000</li>
+                        <li><i class="fa-solid fa-check text-brand-500 mr-2"></i> Plazos de 3 a 36 meses</li>
+                        <li><i class="fa-solid fa-check text-brand-500 mr-2"></i> Sin firma de codeudor ni garante</li>
+                    </ul>
+                </div>
+                <div class="mt-8 pt-4">
+                    <button onclick="cargarCreditoConsumo()" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-extrabold py-3.5 px-6 rounded-xl transition text-center shadow-md cursor-pointer">
+                        Obtener Crédito Online <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PRODUCTO 2: CRÉDITO PRODUCTIVO Y COMERCIAL -->
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden flex flex-col justify-between p-6 sm:p-8 hover:border-brand-gold transition-all duration-300 group">
+                <div class="space-y-4">
+                    <div class="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center text-brand-gold text-2xl group-hover:scale-110 transition-transform duration-200">
+                        <i class="fa-solid fa-store"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-navy">Microcrédito Productivo</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        Diseñado especialmente para comerciantes, artesanos, agricultores y nuevos emprendedores que buscan capital de trabajo o compra de activos.
+                    </p>
+                    <ul class="text-xs text-slate-600 space-y-2 font-medium">
+                        <li><i class="fa-solid fa-check text-brand-gold mr-2"></i> Tasas preferenciales de fomento</li>
+                        <li><i class="fa-solid fa-check text-brand-gold mr-2"></i> Períodos de gracia flexibles</li>
+                        <li><i class="fa-solid fa-check text-brand-gold mr-2"></i> Asesoramiento técnico sin costo</li>
+                    </ul>
+                </div>
+                <div class="mt-8 pt-4">
+                    <a href="#simulador" class="block w-full bg-slate-800 hover:bg-slate-700 text-white font-extrabold py-3.5 px-6 rounded-xl transition text-center">
+                        Simular Proyecto <i class="fa-solid fa-calculator ml-1"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="requisitos" class="bg-brand-navy text-white py-16 px-4">
+        <div class="max-w-7xl mx-auto space-y-12">
+            <div class="text-center max-w-3xl mx-auto">
+                <span class="text-brand-500 text-xs font-bold uppercase tracking-widest">Lo que necesitas</span>
+                <h2 class="text-3xl font-black mt-2">Requisitos para tu Crédito Directo</h2>
+                <p class="text-slate-400 text-sm sm:text-base mt-2">No te preocupes por largos papeleos bancarios. Con nosotros es simple.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                <!-- Requisito 1 -->
+                <div class="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl text-center space-y-3">
+                    <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-brand-500 mx-auto text-xl">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+                    <h4 class="font-bold text-sm">Copia de Cédula</h4>
+                    <p class="text-xs text-slate-400">Documento de identidad vigente para registro.</p>
+                </div>
+
+                <!-- Requisito 2 -->
+                <div class="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl text-center space-y-3">
+                    <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-brand-500 mx-auto text-xl">
+                        <i class="fa-solid fa-file-invoice"></i>
+                    </div>
+                    <h4 class="font-bold text-sm">Papeleta de Votación</h4>
+                    <p class="text-xs text-slate-400">Del último proceso electoral habilitado.</p>
+                </div>
+
+                <!-- Requisito 3 -->
+                <div class="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl text-center space-y-3">
+                    <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-brand-500 mx-auto text-xl">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h4 class="font-bold text-sm">Carta de Luz</h4>
+                    <p class="text-xs text-slate-400">Planilla de servicio básico de tu domicilio.</p>
+                </div>
+
+                <!-- Requisito 4 (Destacado Sin buró) -->
+                <div class="bg-slate-800 border-2 border-brand-500 p-6 rounded-2xl text-center space-y-3 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-brand-500 text-white text-[8px] font-extrabold px-2 py-0.5 uppercase tracking-wider rounded-bl">Gran Beneficio</div>
+                    <div class="w-12 h-12 bg-brand-500 text-white rounded-full flex items-center justify-center mx-auto text-xl shadow-lg shadow-brand-500/20">
+                        <i class="fa-solid fa-ban"></i>
+                    </div>
+                    <h4 class="font-bold text-sm text-brand-100">Sin Revisión de Buró</h4>
+                    <p class="text-xs text-brand-300 font-semibold">¡Confiamos en tu palabra!</p>
+                </div>
+
+                <!-- Requisito 5 -->
+                <div class="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl text-center space-y-3">
+                    <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-brand-gold mx-auto text-xl">
+                        <i class="fa-solid fa-piggy-bank"></i>
+                    </div>
+                    <h4 class="font-bold text-sm">Apertura con $50</h4>
+                    <p class="text-xs text-slate-400">Depósito para habilitar tu cuenta reglamentaria.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="simulador" class="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- COLUMNA 1: CALCULADORA DE AMORTIZACIÓN (7 columnas) -->
+            <div class="lg:col-span-7 space-y-6">
+                <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
+                    <div class="bg-gradient-to-r from-brand-700 to-brand-500 p-6 sm:p-8 text-white">
+                        <h3 class="text-2xl font-black flex items-center gap-2">
+                            <i class="fa-solid fa-calculator text-brand-100"></i> Simulador Financiero Oficial
+                        </h3>
+                        <p class="text-xs text-brand-100/90 mt-1">Simula tu plan de pagos bajo el sistema de amortización francés.</p>
+                    </div>
+
+                    <div class="p-6 sm:p-8 space-y-6">
+                        <!-- Control de Monto -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center">
+                                <label for="monto" class="font-bold text-slate-700 text-sm sm:text-base">Monto a Solicitar</label>
+                                <span class="bg-brand-50 text-brand-700 font-black px-3 py-1 rounded-lg text-lg border border-brand-100" id="v-monto">$1,000</span>
+                            </div>
+                            <input type="range" id="monto" min="100" max="15000" step="100" value="1000" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-slate-400 font-bold">
+                                <span>MÍN: $100</span>
+                                <span>MÁX: $15,000</span>
+                            </div>
+                        </div>
+
+                        <!-- Control de Plazo -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center">
+                                <label for="plazo" class="font-bold text-slate-700 text-sm sm:text-base">Plazo de Pago (Meses)</label>
+                                <span class="bg-brand-50 text-brand-700 font-black px-3 py-1 rounded-lg text-lg border border-brand-100" id="v-plazo">12 meses</span>
+                            </div>
+                            <input type="range" id="plazo" min="3" max="36" step="1" value="12" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-slate-400 font-bold">
+                                <span>MÍN: 3 meses</span>
+                                <span>MÁX: 36 meses</span>
+                            </div>
+                        </div>
+
+                        <!-- Control de Interés Informativo -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center">
+                                <label for="interes" class="font-bold text-slate-700 text-sm sm:text-base">Tasa de Interés Anual (Fija)</label>
+                                <span class="bg-brand-50 text-brand-700 font-black px-3 py-1 rounded-lg text-lg border border-brand-100" id="v-interes">12%</span>
+                            </div>
+                            <input type="range" id="interes" min="8" max="24" step="0.5" value="12" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-slate-400 font-bold">
+                                <span>MÍN: 8%</span>
+                                <span>MÁX: 24%</span>
+                            </div>
+                        </div>
+
+                        <!-- CUADRO DE RESULTADOS DE SIMULACIÓN -->
+                        <div class="bg-slate-50 rounded-2xl p-5 sm:p-6 border border-slate-200 space-y-4">
+                            <div class="flex justify-between items-center text-sm text-slate-600">
+                                <span>Monto total del préstamo:</span>
+                                <span class="font-bold text-slate-800" id="calc-monto">$0.00</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm text-slate-600">
+                                <span>Total de intereses generados:</span>
+                                <span class="font-bold text-slate-800" id="res-interes">$0.00</span>
+                            </div>
+                            <div class="border-t border-slate-200 my-2"></div>
+                            <div class="flex justify-between items-center">
+                                <span class="font-extrabold text-slate-800 text-base sm:text-lg">Cuota Mensual Estimada:</span>
+                                <span class="text-brand-500 font-black text-2xl sm:text-3xl" id="res-cuota">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COLUMNA 2: FORMULARIO DE SOLICITUD DE CRÉDITO DIRECTO (5 columnas) -->
+            <div class="lg:col-span-5">
+                <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden relative">
+                    <div class="h-2 bg-gradient-to-r from-brand-500 to-brand-700"></div>
+                    <div class="p-6 sm:p-8 space-y-6">
+                        <div>
+                            <h3 class="text-xl font-black text-brand-navy flex items-center gap-2">
+                                <i class="fa-solid fa-file-signature text-brand-500"></i> Solicitud de Crédito Directo
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-1">Rellena el formulario con tus datos para solicitar tu aprobación.</p>
+                        </div>
+
+                        <form id="loan-form" class="space-y-4">
+                            <div class="space-y-1">
+                                <label for="nombre" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Nombres y Apellidos</label>
+                                <input type="text" id="nombre" required placeholder="Ej. Juan Andrés Pérez" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label for="identificacion" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Número de Cédula</label>
+                                <input type="text" id="identificacion" required maxlength="10" placeholder="Ej. 1723456789" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label for="whatsapp" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Número de Teléfono</label>
+                                <input type="tel" id="whatsapp" required placeholder="Ej. 0986625228" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label for="correo" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Correo Electrónico</label>
+                                <input type="email" id="correo" required placeholder="ejemplo@correo.com" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label for="ingresos" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Ingresos Mensuales ($)</label>
+                                <input type="number" id="ingresos" required placeholder="Ej. 500" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3 pt-1">
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Valor del Crédito</label>
+                                    <input type="text" id="val-credito" readonly class="w-full p-3 bg-slate-100 border border-slate-200 text-slate-700 font-bold rounded-xl text-sm outline-none cursor-not-allowed">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Meses Plazo</label>
+                                    <input type="text" id="val-plazo" readonly class="w-full p-3 bg-slate-100 border border-slate-200 text-slate-700 font-bold rounded-xl text-sm outline-none cursor-not-allowed">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-extrabold py-4 px-6 rounded-xl transition shadow-lg shadow-brand-500/25 cursor-pointer">
+                                Aplicar a mi Crédito Ahora <i class="fa-solid fa-chevron-right ml-1"></i>
+                            </button>
+                        </form>
+
+                        <div id="alert-exito" class="hidden bg-emerald-50 border border-emerald-200 p-5 rounded-2xl text-center space-y-2">
+                            <div class="w-10 h-10 bg-brand-500 text-white rounded-full flex items-center justify-center mx-auto text-lg shadow-md shadow-brand-500/25">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <h4 class="font-extrabold text-brand-900 text-sm">¡Tu crédito está aprobado!</h4>
+                            <p class="text-xs text-brand-700 leading-relaxed">Un asesor se contactará contigo de inmediato.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECCIÓN DE UBICACIONES Y HORARIOS -->
+    <section id="oficinas" class="bg-white border-t border-b border-slate-200 py-16 px-4">
+        <div class="max-w-7xl mx-auto space-y-10">
+            <div class="text-center max-w-2xl mx-auto">
+                <span class="text-brand-500 text-xs font-bold uppercase tracking-widest">Nuestra Presencia</span>
+                <h2 class="text-3xl font-black mt-2 text-brand-navy">Oficinas Físicas y Horarios</h2>
+                <p class="text-slate-500 text-sm mt-1">Visítanos y recibe atención personalizada.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Oficina 1 -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex items-start gap-4">
+                    <div class="w-12 h-12 bg-brand-100 text-brand-700 rounded-xl flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-building"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <h4 class="font-extrabold text-brand-navy text-lg">Quito Centro</h4>
+                        <p class="text-sm text-slate-600"><i class="fa-solid fa-map-pin text-brand-500 mr-1.5"></i> Av. Amazonas y Patria</p>
+                        <p class="text-xs text-slate-500 font-semibold pt-1"><i class="fa-solid fa-clock mr-1"></i> Lunes a Viernes de 09:00 AM a 05:00 PM</p>
+                    </div>
+                </div>
+
+                <!-- Oficina 2 -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex items-start gap-4">
+                    <div class="w-12 h-12 bg-brand-100 text-brand-700 rounded-xl flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-tree"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <h4 class="font-extrabold text-brand-navy text-lg">Valle de los Chillos</h4>
+                        <p class="text-sm text-slate-600"><i class="fa-solid fa-map-pin text-brand-500 mr-1.5"></i> Sucursal Principal Chillos</p>
+                        <p class="text-xs text-slate-500 font-semibold pt-1"><i class="fa-solid fa-clock mr-1"></i> Lunes a Viernes de 09:00 AM a 05:00 PM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN DE PREGUNTAS FRECUENTES (FAQ) -->
+    <section class="max-w-4xl mx-auto px-4 py-16 sm:px-6 lg:px-8 space-y-10">
+        <div class="text-center">
+            <span class="text-brand-500 text-xs font-bold uppercase tracking-widest">Preguntas Frecuentes</span>
+            <h2 class="text-3xl font-black mt-2 text-brand-navy">Resuelve tus Dudas al Instante</h2>
+        </div>
+
+        <div class="space-y-4 bg-white p-6 sm:p-10 rounded-3xl border border-slate-200 shadow-xl">
+            <!-- FAQ 1 -->
+            <div class="border-b border-slate-200 pb-4">
+                <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center text-left font-bold text-brand-navy hover:text-brand-500 transition outline-none py-2">
+                    <span>¿Cuánto tiempo demora la aprobación de mi crédito?</span>
+                    <i class="faq-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-200 ml-2"></i>
+                </button>
+                <div class="faq-content text-slate-500 text-sm mt-2">
+                    <p>Una vez que entregas tu carpeta con los requisitos completos en cualquiera de nuestras sucursales, el crédito es entregado inmediatamente tras la validación de firmas.</p>
+                </div>
+            </div>
+
+            <!-- FAQ 2 -->
+            <div class="border-b border-slate-200 pb-4">
+                <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center text-left font-bold text-brand-navy hover:text-brand-500 transition outline-none py-2">
+                    <span>¿Cómo realizo el pago de mis cuotas mensuales?</span>
+                    <i class="faq-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-200 ml-2"></i>
+                </button>
+                <div class="faq-content text-slate-500 text-sm mt-2">
+                    <p>Puedes pagar tus cuotas de forma muy cómoda mediante depósito directo en ventanilla o por transferencia electrónica directamente a nuestra cuenta del Banco Pichincha.</p>
+                </div>
+            </div>
+
+            <!-- FAQ 3 -->
+            <div class="border-b border-slate-200 pb-4">
+                <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center text-left font-bold text-brand-navy hover:text-brand-500 transition outline-none py-2">
+                    <span>¿Por qué se requiere un depósito inicial de $50 para abrir la cuenta?</span>
+                    <i class="faq-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-200 ml-2"></i>
+                </button>
+                <div class="faq-content text-slate-500 text-sm mt-2">
+                    <p>El depósito de $50 corresponde a tu aporte inicial como socio y la habilitación de tu libreta de ahorros reglamentaria, la cual te pertenece y gana rendimientos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-brand-navy text-slate-400 py-12 px-4 border-t-4 border-brand-500">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left text-sm">
+            <div class="space-y-3">
+                <span class="block text-white font-extrabold text-lg">QUITMUNDO LTDA.</span>
+                <p class="text-xs text-slate-400">Cooperativa de Ahorro y Crédito autorizada y vigilada por la SEPS.</p>
+            </div>
+            <div class="space-y-2">
+                <h4 class="font-bold text-white uppercase text-xs tracking-wider">Sucursales</h4>
+                <p class="text-xs">Quito: Av. Amazonas y Patria</p>
+                <p class="text-xs">Valle de los Chillos: Principal Chillos</p>
+            </div>
+            <div class="space-y-2">
+                <h4 class="font-bold text-white uppercase text-xs tracking-wider">Atención Legal</h4>
+                <p class="text-[11px] leading-relaxed">Toda postulación está sujeta a políticas de validación de identidad internas de la cooperativa.</p>
+            </div>
+        </div>
+        <div class="border-t border-slate-800 mt-8 pt-8 text-center text-xs text-slate-500">
+            © 2026 Cooperativa de Ahorro y Crédito Quitmundo LTDA. Todos los derechos reservados.
+        </div>
+    </footer>
+
+    <!-- MODAL DE APERTURA DE CUENTA ONLINE CON DATALINK (DATAFAST) -->
+    <div id="modal-cuenta" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <!-- Fondo oscuro -->
+        <div class="fixed inset-0 bg-brand-navy/60 backdrop-blur-sm" onclick="cerrarModalCuenta()"></div>
+        
+        <!-- Tarjeta del Modal -->
+        <div class="relative bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden z-10 transition-all duration-300">
+            <div class="bg-brand-navy text-white p-6 relative">
+                <button onclick="cerrarModalCuenta()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl outline-none">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </button>
+                <h3 class="text-xl font-black flex items-center gap-2 text-brand-100">
+                    <i class="fa-solid fa-user-plus text-brand-500"></i> Apertura de Cuenta Online
+                </h3>
+                <p class="text-xs text-slate-300 mt-1">Completa tus datos para pre-registrar tu cuenta de socio de inmediato.</p>
+            </div>
+
+            <div class="p-6 sm:p-8 space-y-6">
+                <!-- PASO 1: FORMULARIO -->
+                <form id="form-apertura" class="space-y-4">
+                    <div class="space-y-1">
+                        <label for="ap-nombres" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Nombres y Apellidos Completos</label>
+                        <input type="text" id="ap-nombres" required placeholder="Ej. Carlos Patricio Chimbo" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label for="ap-cedula" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Número de Cédula</label>
+                            <input type="text" id="ap-cedula" required maxlength="10" placeholder="Ej. 1723456789" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition">
+                        </div>
+                        <div class="space-y-1">
+                            <label for="ap-dactilar" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Código Dactilar</label>
+                            <input type="text" id="ap-dactilar" required placeholder="Ej. N12345678" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label for="ap-celular" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Teléfono de Contacto</label>
+                            <input type="tel" id="ap-celular" required placeholder="Ej. 0986625228" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition">
+                        </div>
+                        <div class="space-y-1">
+                            <label for="ap-correo" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Correo Electrónico</label>
+                            <input type="email" id="ap-correo" required placeholder="ejemplo@correo.com" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition">
+                        </div>
+                    </div>
+
+                    <div class="bg-brand-50 border border-brand-200 p-4 rounded-2xl flex items-start gap-3 text-brand-900 text-xs leading-relaxed">
+                        <i class="fa-solid fa-circle-info text-brand-600 mt-0.5 text-sm"></i>
+                        <span>Para habilitar legalmente su cuenta como socio de Quitmundo, es obligatorio un depósito reglamentario de <strong>$50 dólares</strong> mediante su tarjeta. No se activará la cuenta si no se efectúa dicho pago.</span>
+                    </div>
+
+                    <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-extrabold py-4 px-6 rounded-xl transition shadow-lg shadow-brand-500/25 cursor-pointer flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-lock"></i> Proceder al Pago Seguro ($50)
+                    </button>
+                </form>
+
+                <!-- PASO 2: REDIRECCIÓN DATALINK -->
+                <div id="modal-payment-step" class="hidden text-center space-y-4">
+                    <div class="w-16 h-16 bg-brand-50 text-brand-600 rounded-full flex items-center justify-center mx-auto text-2xl shadow-lg">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-extrabold text-slate-800 text-base">¡Pre-registro Completo!</h4>
+                        <p class="text-xs text-slate-500 mt-1 px-4 leading-relaxed">
+                            Sus datos se registraron con éxito. Ahora será redirigido al portal oficial seguro de <strong>Datalink (Datafast Ecuador)</strong> para pagar los $50 reglamentarios.
+                        </p>
+                    </div>
+
+                    <!-- BOTÓN EXTERNO DEL DATALINK DEL ADMINISTRADOR -->
+                    <button onclick="irALinkDatafast()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-indigo-600 hover:to-blue-600 text-white font-extrabold py-4 px-6 rounded-xl transition shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2 cursor-pointer text-sm">
+                        <i class="fa-solid fa-credit-card"></i> Pagar con Tarjeta (Datalink Datafast)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURACIÓN DE SEGURIDAD INTERNA ---
+        // Tu número de WhatsApp de Ecuador completo con código de país (sin el "+")
+        const NUMERO_WHATSAPP_PRIVADO = "593986625228"; 
+        
+        // Pega aquí la dirección URL exacta de tu Datalink de Datafast para el pago de los $50
+        const TU_DATALINK_URL = "https://bit.ly/datalink-quitmundo-50"; 
+
+        // --- SELECTORES CALCULADORA ---
+        const sliderMonto = document.getElementById('monto');
+        const sliderPlazo = document.getElementById('plazo');
+        const sliderInteres = document.getElementById('interes');
+
+        const lblMonto = document.getElementById('v-monto');
+        const lblPlazo = document.getElementById('v-plazo');
+        const lblInteres = document.getElementById('v-interes');
+
+        const resMonto = document.getElementById('calc-monto');
+        const resInteres = document.getElementById('res-interes');
+        const resCuota = document.getElementById('res-cuota');
+
+        // Formulario de Crédito
+        const formMonto = document.getElementById('val-credito');
+        const formPlazo = document.getElementById('val-plazo');
+        const formCredito = document.getElementById('loan-form');
+        const alertExito = document.getElementById('alert-exito');
+
+        // --- CÁLCULO SISTEMA FRANCÉS ---
+        function calcularPrestamo() {
+            const monto = parseFloat(sliderMonto.value);
+            const meses = parseInt(sliderPlazo.value);
+            const interesAnual = parseFloat(sliderInteres.value) / 100;
+
+            // Actualizar etiquetas visuales
+            lblMonto.textContent = `$${monto.toLocaleString('es-EC')}`;
+            lblPlazo.textContent = `${meses} meses`;
+            lblInteres.textContent = `${sliderInteres.value}%`;
+
+            // Sincronizar con formulario oculto
+            formMonto.value = `$${monto.toLocaleString('es-EC')}`;
+            formPlazo.value = `${meses} meses`;
+
+            const tasaMensual = interesAnual / 12;
+            let cuotaMensual = 0;
+
+            if (tasaMensual > 0) {
+                cuotaMensual = (monto * tasaMensual) / (1 - Math.pow(1 + tasaMensual, -meses));
+            } else {
+                cuotaMensual = monto / meses;
+            }
+
+            const totalPagar = cuotaMensual * meses;
+            const totalInteres = totalPagar - monto;
+
+            // Mostrar resultados en pantalla
+            resMonto.textContent = `$${monto.toLocaleString('es-EC', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            resInteres.textContent = `$${totalInteres.toLocaleString('es-EC', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            resCuota.textContent = `$${cuotaMensual.toLocaleString('es-EC', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        }
+
+        // Eventos Sliders
+        sliderMonto.addEventListener('input', calcularPrestamo);
+        sliderPlazo.addEventListener('input', calcularPrestamo);
+        sliderInteres.addEventListener('input', calcularPrestamo);
+
+        // --- ENVIAR SOLICITUD DE CRÉDITO POR WHATSAPP (PRIVADO) ---
+        formCredito.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const nombre = document.getElementById('nombre').value;
+            const cedula = document.getElementById('identificacion').value;
+            const telefono = document.getElementById('whatsapp').value;
+            const correo = document.getElementById('correo').value;
+            const ingresos = document.getElementById('ingresos').value;
+
+            // Datos simulación
+            const montoSimulado = sliderMonto.value;
+            const plazoSimulado = sliderPlazo.value;
+            const interesSimulado = sliderInteres.value;
+            const cuotaSimulada = resCuota.textContent;
+
+            const mensaje = `*NUEVA SOLICITUD DE CRÉDITO - QUITMUNDO* \n\n` +
+                `👤 *Socio:* ${nombre}\n` +
+                `🪪 *Cédula:* ${cedula}\n` +
+                `📱 *Teléfono:* ${telefono}\n` +
+                `📧 *Correo:* ${correo}\n` +
+                `💵 *Ingresos:* $${ingresos}\n\n` +
+                `*DETALLE DEL CRÉDITO SIMULADO:*\n` +
+                `💰 *Monto:* $${montoSimulado}\n` +
+                `📅 *Plazo:* ${plazoSimulado} meses\n` +
+                `📈 *Interés:* ${interesSimulado}%\n` +
+                `💸 *Cuota Mensual:* ${cuotaSimulada}\n\n` +
+                `*Requisitos:* Copia de cédula, papeleta de votación y carta de luz listos.`;
+
+            const url = `https://api.whatsapp.com/send?phone=${NUMERO_WHATSAPP_PRIVADO}&text=${encodeURIComponent(mensaje)}`;
+
+            alertExito.classList.remove('hidden');
+            formCredito.classList.add('hidden');
+
+            setTimeout(() => {
+                window.open(url, '_blank');
+                formCredito.reset();
+                formCredito.classList.remove('hidden');
+                alertExito.classList.add('hidden');
+                calcularPrestamo();
+            }, 2500);
+        });
+
+        // --- CONTROL MODAL APERTURA ---
+        const modalCuenta = document.getElementById('modal-cuenta');
+        const formApertura = document.getElementById('form-apertura');
+        const modalPaymentStep = document.getElementById('modal-payment-step');
+
+        function abrirModalCuenta() {
+            modalCuenta.classList.remove('hidden');
+            formApertura.classList.remove('hidden');
+            modalPaymentStep.classList.add('hidden');
+        }
+
+        function cerrarModalCuenta() {
+            modalCuenta.classList.add('hidden');
+            formApertura.reset();
+        }
+
+        // --- ENVÍO PRE-REGISTRO APERTURA & PAGO DATALINK ---
+        formApertura.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const apNombres = document.getElementById('ap-nombres').value;
+            const apCedula = document.getElementById('ap-cedula').value;
+            const apDactilar = document.getElementById('ap-dactilar').value;
+            const apCelular = document.getElementById('ap-celular').value;
+            const apCorreo = document.getElementById('ap-correo').value;
+
+            // Creamos un mensaje directo de WhatsApp para el administrador
+            // con el código dactilar e identificación del socio
+            const mensajeApertura = `*SOLICITUD APERTURA DE CUENTA ONLINE* \n` +
+                `*COOPERATIVA QUITMUNDO LTDA.*\n\n` +
+                `👤 *Socio:* ${apNombres}\n` +
+                `🪪 *Cédula:* ${apCedula}\n` +
+                `🔒 *Código Dactilar:* ${apDactilar}\n` +
+                `📱 *Celular:* ${apCelular}\n` +
+                `📧 *Correo:* ${apCorreo}\n\n` +
+                `*El socio ha procedido al pago de los $50 dólares reglamentarios por Datalink.*`;
+
+            const urlWhatsAppApertura = `https://api.whatsapp.com/send?phone=${NUMERO_WHATSAPP_PRIVADO}&text=${encodeURIComponent(mensajeApertura)}`;
+
+            // Ocultamos el formulario y mostramos el paso de pago
+            formApertura.classList.add('hidden');
+            modalPaymentStep.classList.remove('hidden');
+
+            // Abrimos de forma automática la notificación de WhatsApp para el administrador
+            window.open(urlWhatsAppApertura, '_blank');
+        });
+
+        function irALinkDatafast() {
+            // Redirige al socio a tu link de Datafast
+            window.open(TU_DATALINK_URL, '_blank');
+            cerrarModalCuenta();
+        }
+
+        // --- Cargar Crédito de Consumo al Simulador ---
+        function cargarCreditoConsumo() {
+            sliderMonto.value = 2500;
+            sliderPlazo.value = 18;
+            sliderInteres.value = 14;
+            calcularPrestamo();
+            document.getElementById('simulador').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- CONTROL ACCORDION FAQs ---
+        function toggleFaq(btn) {
+            const parent = btn.parentElement;
+            const isActive = parent.classList.contains('faq-active');
+
+            // Cerrar todos primero
+            document.querySelectorAll('.border-b').forEach(item => {
+                item.classList.remove('faq-active');
+            });
+
+            if (!isActive) {
+                parent.classList.add('faq-active');
+            }
+        }
+
+        // Ejecutar primera simulación
+        calcularPrestamo();
+    </script>
+</body>
+</html>
